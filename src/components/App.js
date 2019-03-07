@@ -31,6 +31,7 @@ getLocation(e){
 const regex=new RegExp(e.target.value,'gi');
 let newlocations=this.state.matchedLocation.filter((item)=> {return item.city.match(regex) || item.state.match(regex)});
 this.setState({matchedLocation:newlocations});
+
 }
 
 
@@ -42,6 +43,12 @@ this.setState({matchedLocation:newlocations});
 <div className="mainDiv">
 <p>Find The Perfect Restaurant </p>
 <input className="searchBar" type="text" placeholder='Enter your location..' onChange={this.getLocation.bind(this)}/>
+
+<ul className="searchSugg">
+  <li>1</li>
+  <li>2</li>
+</ul>
+
   <button id="searchButton">Search</button>
   </div>
       </div>
