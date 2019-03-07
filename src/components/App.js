@@ -27,12 +27,23 @@ return fetch(encodedURI)
 }
 //to filter the cities to match what is typed on the search bar .
 getLocation(e){
-  console.log(e.target.value)
 const regex=new RegExp(e.target.value,'gi');
 let newlocations=this.state.matchedLocation.filter((item)=> {return item.city.match(regex) || item.state.match(regex)});
-this.setState({matchedLocation:newlocations});
+let loca= newlocations.map((item)=>{
+  return `<li>${item.city}, ${item.state} </li>`
+ }).join('');
 
-}
+ var searchResult=document.getElementById('searchSugg');
+ searchResult.innerHTML=loca;
+ if(e.target.value===''){
+  searchResult.innerHTML='';
+ }
+
+};
+
+
+
+
 
 
 
@@ -44,7 +55,7 @@ this.setState({matchedLocation:newlocations});
 <p>Find The Perfect Restaurant </p>
 <input className="searchBar" type="text" placeholder='Enter your location..' onChange={this.getLocation.bind(this)}/>
 
-<ul className="searchSugg">
+<ul id="searchSugg">
   <li>1</li>
   <li>2</li>
 </ul>
