@@ -4,15 +4,33 @@ import './App.css';
 class App extends Component {
 constructor(props){
   super(props);
+  this.state={
+    matchedLocation:[],
+  }
+  this.getAllCities=this.getAllCities.bind(this);
+
 }
-
- getLocation(){
-const encodedURI=encodeURI(`https://developers.zomato.com/api/v2.1/locations?query=sudan`);
-return fetch(encodedURI,{ headers: {'user-key': '166937a2df6fbfecdfa8c7a0a8f2bb5a'} }
-)
+componentDidMount(){
+this.getAllCities();
+}
+//to fetch all the cities first 
+ getAllCities(){
+const encodedURI=encodeURI(`https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json`);
+return fetch(encodedURI)
 .then (data=>data.json())
-.then (d=>console.log(d.location_suggestions))
+.then (data=>
+  {
+   
+    this.setState({matchedLocation:data});
+  })
 
+}
+//to filter the cities to match what is typed on the search bar .
+getLocation(e){
+  console.log(e.target.value)
+const regex=new RegExp(e.target.value,'gi');
+let newlocations=this.state.matchedLocation.filter((item)=> {return item.city.match(regex) || item.state.match(regex)});
+this.setState({matchedLocation:newlocations});
 }
 
 
