@@ -6,8 +6,10 @@ constructor(props){
   super(props);
   this.state={
     matchedLocation:[],
+    selectedCity:''
   }
   this.getAllCities=this.getAllCities.bind(this);
+  this.setChoice=this.setChoice.bind(this);
 
 }
 componentDidMount(){
@@ -25,21 +27,44 @@ return fetch(encodedURI)
   })
 
 }
+//function to take the selected city or country and put it on the search bar 
+setChoice(e){
+  var selectedCity=e.target.innerHTML;
+this.setState({selectedCity:selectedCity});
+var searchResult=document.getElementById('searchSugg');
+let searchBar=document.getElementById('searchBar');
+searchBar.value=selectedCity;
+searchResult.style.display='none';
+
+
+}
+
+
 //to filter the cities to match what is typed on the search bar .
 getLocation(e){
 const regex=new RegExp(e.target.value,'gi');
 let newlocations=this.state.matchedLocation.filter((item)=> {return item.city.match(regex) || item.state.match(regex)});
 let loca= newlocations.map((item)=>{
-  return `<li>${item.city}, ${item.state} </li>`
+
+  
+  return `<li class='city'>${item.city}, ${item.state} </li>`
  }).join('');
+
+ 
 
  var searchResult=document.getElementById('searchSugg');
  searchResult.innerHTML=loca;
+searchResult.style.display='block';
+ var allCities=document.querySelectorAll('.city');
+ allCities.forEach((item)=>item.addEventListener('click',this.setChoice))
+ 
  if(e.target.value===''){
   searchResult.innerHTML='';
  }
 
 };
+
+
 
 
 
@@ -53,11 +78,10 @@ let loca= newlocations.map((item)=>{
        <div className="navbar"><img src='burger.jpg'   /></div>
 <div className="mainDiv">
 <p>Find The Perfect Restaurant </p>
-<input className="searchBar" type="text" placeholder='Enter your location..' onChange={this.getLocation.bind(this)}/>
+<input id="searchBar" type="text" placeholder='Enter your location..' onChange={this.getLocation.bind(this)}/>
 
 <ul id="searchSugg">
-  <li>1</li>
-  <li>2</li>
+  
 </ul>
 
   <button id="searchButton">Search</button>
