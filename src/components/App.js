@@ -6,7 +6,9 @@ constructor(props){
   super(props);
   this.state={
     matchedLocation:[],
-    selectedCity:''
+    selectedCity:'',
+    longitude:'',
+    latitude:''
   }
   this.getAllCities=this.getAllCities.bind(this);
   this.setChoice=this.setChoice.bind(this);
@@ -24,18 +26,25 @@ return fetch(encodedURI)
   {
    
     this.setState({matchedLocation:data});
+    console.log(this.state.matchedLocation)
   })
 
 }
 //function to take the selected city or country and put it on the search bar 
 setChoice(e){
   var selectedCity=e.target.innerHTML;
-this.setState({selectedCity:selectedCity});
 var searchResult=document.getElementById('searchSugg');
 let searchBar=document.getElementById('searchBar');
 searchBar.value=selectedCity;
 searchResult.style.display='none';
-
+console.log(e.target.id)
+//fetching the id that we already stored the long and lat for it , to save it on a state to use it on the other components
+var longlat=e.target.id;
+var array=longlat.split(',');
+this.setState({
+  longitude:array[0],
+  latitude:array[1]
+})
 
 }
 
@@ -47,7 +56,7 @@ let newlocations=this.state.matchedLocation.filter((item)=> {return item.city.ma
 let loca= newlocations.map((item)=>{
 
   
-  return `<li class='city'>${item.city}, ${item.state} </li>`
+  return `<li class='city' id='${item.longitude},${item.latitude}'>${item.city}, ${item.state} </li>`
  }).join('');
 
  
