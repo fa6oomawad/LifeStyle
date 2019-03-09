@@ -75,7 +75,7 @@ searchResult.style.display='block';
   render() {
     return (
       <div className="App">
-       <div className="navbar"><img src='burger.jpg'   /></div>
+       <div className="navbar"><img src='burger.jpg'  alt="logo" /></div>
 <div className="mainDiv">
 <p>Find The Perfect Restaurant </p>
 <input id="searchBar" type="text" placeholder='Enter your location..' onChange={this.getLocation.bind(this)}/>
