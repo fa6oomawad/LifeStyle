@@ -1,21 +1,29 @@
 import React, { Component } from 'react';
 import './App.css';
-
+import Explore from './Explore.js';
+import {
+  HashRouter,
+  Route,
+  Link
+} from 'react-router-dom';
 class App extends Component {
 constructor(props){
   super(props);
   this.state={
     matchedLocation:[],
-    selectedCity:'',
+    selectedCity:'new york',
     longitude:'',
     latitude:''
   }
   this.getAllCities=this.getAllCities.bind(this);
   this.setChoice=this.setChoice.bind(this);
+  this.getCityId=this.getCityId.bind(this);
 
 }
 componentDidMount(){
 this.getAllCities();
+this.getCityId();
+
 }
 //to fetch all the cities first 
  getAllCities(){
@@ -73,6 +81,21 @@ searchResult.style.display='block';
 
 };
 
+//function to get city id , so the id can be used with zomato api 
+getCityId(){
+  const encodedURI=encodeURI(`https://developers.zomato.com/api/v2.1/locations?query=${this.state.selectedCity}`);
+  const config = { headers: {'user-key': '166937a2df6fbfecdfa8c7a0a8f2bb5a'} }; 
+return fetch(encodedURI,config)
+.then (data=>data.json())
+.then (data=>
+  {
+   
+   
+    console.log(data)
+  })
+
+}
+
 
 
 
@@ -83,6 +106,8 @@ searchResult.style.display='block';
 
   render() {
     return (
+      <HashRouter>
+
       <div className="App">
        <div className="navbar">  <img src='1.png'  alt="logo" />
 </div>
@@ -94,10 +119,14 @@ searchResult.style.display='block';
   
 </ul>
 
-  <button id="searchButton">Search</button>
+ <Link to="/SearchResult"><button id="searchButton">Search</button></Link> 
   </div>
+  <Explore/>
+<Route path="/SearchResult" render={(props)=><Explore {...props} long={this.state.longitude} lat={this.state.latitude}/>}/>
   
       </div>
+      </HashRouter>
+
     );
   }
 }
