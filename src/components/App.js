@@ -13,7 +13,9 @@ constructor(props){
     matchedLocation:[],
     selectedCity:'new york',
     longitude:'',
-    latitude:''
+    latitude:'',
+    cityId:'' ,
+    cityType:'' ,
   }
   this.getAllCities=this.getAllCities.bind(this);
   this.setChoice=this.setChoice.bind(this);
@@ -25,6 +27,7 @@ this.getAllCities();
 this.getCityId();
 
 }
+
 //to fetch all the cities first 
  getAllCities(){
 const encodedURI=encodeURI(`https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json`);
@@ -35,7 +38,9 @@ return fetch(encodedURI)
    
     this.setState({matchedLocation:data});
     console.log(this.state.matchedLocation)
-  })
+  });
+
+  
 
 }
 //function to take the selected city or country and put it on the search bar 
@@ -90,8 +95,11 @@ return fetch(encodedURI,config)
 .then (data=>
   {
    
-   
-    console.log(data)
+   this.setState({
+     cityId: data.location_suggestions[0].city_id,
+     cityType:data.location_suggestions[0].entity_type
+  })
+    console.log('function run',this.state.cityId,this.state.cityType)
   })
 
 }
@@ -121,9 +129,8 @@ return fetch(encodedURI,config)
 
  <Link to="/SearchResult"><button id="searchButton">Search</button></Link> 
   </div>
-  <Explore/>
-<Route path="/SearchResult" render={(props)=><Explore {...props} long={this.state.longitude} lat={this.state.latitude}/>}/>
-  
+<Explore city_id={this.state.cityId} entity_type={this.state.cityType}/>
+<Route path="/SearchResult" render={(props)=><Explore {...props} long={this.state.longitude} lat={this.state.latitude} selectedCity={this.state.selectedCity}/>}/>
       </div>
       </HashRouter>
 
